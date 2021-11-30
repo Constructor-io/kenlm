@@ -17,7 +17,7 @@ via _Internal PyPi server_.
 
 ## usage
 
-In addition to original `kenlm` package `cnstrc_kenlm` comes with a dedicated `kenlm_bin` module. 
+In addition to original `kenlm` package `cnstrc_kenlm` comes with a dedicated `kenlm_bin` module.
 This is just a thin wrapper over external binary executables.
 
 ```python
@@ -37,3 +37,13 @@ kenlm_bin.call(
     timeout=60,
 )
 ```
+
+## manylinux wheels
+To build cross platform **manylinux** wheels from project root run:
+```console
+docker build -t manylinux2014_for_kenlm .
+docker run --rm -v ${PWD}:/io -w=/io manylinux2014_for_kenlm /bin/bash build_cnstrc_wheel.sh
+```
+
+This will mount your working directory to Docker container and use it to build wheels and manylinux
+wheels. The results of the build will be in ./wheels/manylinux.
