@@ -50,7 +50,13 @@ if compile_test('lzma.h', 'lzma'):
 
 LIBRARY_DIRS = []
 LINK_LIBRARIES = [
-    'boost'
+    'boost_atomic',
+    'boost_chrono',
+    'boost_date_time',
+    'boost_program_options',
+    'boost_system',
+    'boost_thread',
+    'boost_unit_test_framework'
 ]
 
 # clang doesn't have static link flag, so in order to enforce static link
@@ -63,8 +69,8 @@ if platform.system() == 'Darwin':
         os.makedirs(mac_os_static_libs_dir)
 
     for lib in LINK_LIBRARIES:
-        lib_file_name = 'lib{}.a'.format(lib)
-        src_file = os.path.join('/usr/local/lib', lib_file_name)
+        lib_file_name = 'lib{}-mt.a'.format(lib)
+        src_file = os.path.join('/usr/local/lib/', lib_file_name)
         dst_file = os.path.join(mac_os_static_libs_dir, lib_file_name)
         shutil.copyfile(src_file, dst_file)
         LIBS.append(lib)
