@@ -42,7 +42,7 @@ kenlm_bin.call(
 To build cross platform **manylinux** wheels from project root run:
 ```console
 docker build -t manylinux2014_for_kenlm .
-docker run --rm -v ${PWD}:/io -w=/io manylinux2014_for_kenlm /bin/bash build_cnstrc_wheel.sh
+docker run --rm -v ${PWD}:/io -w=/io manylinux2014_for_kenlm /bin/bash build_cnstrc_manylinux_wheel.sh
 ```
 
 This will mount your working directory to Docker container and use it to build wheels and manylinux
