@@ -39,11 +39,23 @@ kenlm_bin.call(
 ```
 
 ## manylinux wheels
-To build cross platform **manylinux** wheels from project root run:
+To build cross platform **manylinux** wheels run the following from project root:
 ```console
 docker build -t manylinux2014_for_kenlm .
 docker run --rm -v ${PWD}:/io -w=/io manylinux2014_for_kenlm /bin/bash build_cnstrc_manylinux_wheel.sh
 ```
 
 This will mount your working directory to Docker container and use it to build wheels and manylinux
-wheels. The results of the build will be in ./wheels/manylinux.
+wheels. The results of the build will be in `./wheels/manylinux`.
+
+## macOS wheels
+Requirements:
+ - be on macOS
+ - have [delocate](https://github.com/matthew-brett/delocate) installed
+
+To build **macOS** wheels with embedded libraries run the following from project root:
+```console
+./build_cnstrc_macos_wheel.sh
+```
+
+The results of the build will be in `./wheels/macos`.
