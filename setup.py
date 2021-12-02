@@ -4,7 +4,6 @@ import platform
 import os
 import sys
 import re
-import shutil
 
 #Does gcc compile with this header and library?
 def compile_test(header, library):
@@ -47,41 +46,12 @@ if compile_test('lzma.h', 'lzma'):
     ARGS.append('-DHAVE_XZLIB')
     LIBS.append('lzma')
 
-
-LIBRARY_DIRS = []
-LINK_LIBRARIES = [
-    'boost_atomic',
-    'boost_chrono',
-    'boost_date_time',
-    'boost_program_options',
-    'boost_system',
-    'boost_thread',
-    'boost_unit_test_framework'
-]
-
-# clang doesn't have static link flag, so in order to enforce static link
-# we are copying lib*.a files to dedicated dir
-if platform.system() == 'Darwin':
-    mac_os_static_libs_dir = 'mac_os_static_libs'
-    LIBRARY_DIRS.append(mac_os_static_libs_dir)
-
-    if not os.path.exists(mac_os_static_libs_dir):
-        os.makedirs(mac_os_static_libs_dir)
-
-    for lib in LINK_LIBRARIES:
-        lib_file_name = 'lib{}-mt.a'.format(lib)
-        src_file = os.path.join('/usr/local/lib/', lib_file_name)
-        dst_file = os.path.join(mac_os_static_libs_dir, lib_file_name)
-        shutil.copyfile(src_file, dst_file)
-        LIBS.append(lib)
-
 ext_modules = [
     Extension(name='kenlm',
         sources=FILES + ['python/kenlm.cpp'],
         language='C++',
         include_dirs=['.'],
         libraries=LIBS,
-        library_dirs=LIBRARY_DIRS,
         extra_compile_args=ARGS)
 ]
 
