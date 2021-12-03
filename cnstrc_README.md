@@ -51,7 +51,8 @@ wheels. The results of the build will be in `./wheels/manylinux`.
 ## macOS wheels
 Requirements:
  - be on macOS
- - have [delocate](https://github.com/matthew-brett/delocate) installed
+ - have [delocate](https://github.com/matthew-brett/delocate) installed. You can install deloate by
+ running `pip install delocate>=0.10.1`.
 
 To build **macOS** wheels with embedded libraries run the following from project root:
 ```console
