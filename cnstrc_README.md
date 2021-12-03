@@ -48,6 +48,8 @@ docker run --rm -v ${PWD}:/io -w=/io manylinux2014_for_kenlm /bin/bash build_cns
 This will mount your working directory to Docker container and use it to build wheels and manylinux
 wheels. The results of the build will be in `./wheels/manylinux`.
 
+Upload generated binary wheels to _Internal PyPi server_.
+
 ## macOS wheels
 Requirements:
  - be on macOS
@@ -60,3 +62,5 @@ To build **macOS** wheels with embedded libraries run the following from project
 ```
 
 The results of the build will be in `./wheels/macos`.
+
+Upload generated binary wheels to _Internal PyPi server_.
