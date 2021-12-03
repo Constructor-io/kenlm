@@ -1,3 +1,7 @@
+#!/bin/bash
+
+set -e
+
 ./build_cnstrc_wheel.sh
 
 # repair wheels to have embedded libraries
