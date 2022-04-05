@@ -69,4 +69,4 @@ The results of the build will be in `./wheels/macos`.
 Upload generated binary wheels to _Internal PyPi server_.
 
 Note: Currently we support both Intel and M1 chips, 
-please ensure to have both binary wheels uploaded on _Internal PyPi server_.
+please ensure to have both binary wheels uploaded to _Internal PyPi server_.
