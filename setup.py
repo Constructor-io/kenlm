@@ -126,7 +126,7 @@ setup(
     ext_modules=ext_modules,
     cmdclass={"build_ext": build_ext},
     include_package_data=True,
-    version='0.0.3',
+    version='0.0.4',
     packages=['kenlm_bin'],
     package_data={'kenlm_bin': ['bin/*']}
 )
