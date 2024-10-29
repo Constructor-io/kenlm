@@ -19,9 +19,11 @@ CMakeCache.txt
 CTestTestfile.cmake
 DartConfiguration.tcl
 Makefile
+*.egg-info/
 
 # cnstrc ignores
 .idea/
 kenlm_bin/bin/
 cnstrc_kenlm.egg-info/
 wheels/
+
