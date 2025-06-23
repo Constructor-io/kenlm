@@ -153,11 +153,11 @@ cdef class Model:
         :param path: path to an arpa file or a kenlm binary file.
         :param config: configuration options (see lm/config.hh for documentation)
         """
-        cdef bytes path_bytes = path.encode('utf-8')
+        cdef bytes path_bytes = as_str(path)
         cdef char* c_path = path_bytes
         cdef _kenlm.Model* model
         cdef _kenlm.Config* c_config = &config._c_config
-        self.path = os.path.abspath(as_str(path))
+        self.path = os.path.abspath(path_bytes)
         try:
             if release_gil:
                 with nogil:
