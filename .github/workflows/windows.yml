@@ -14,6 +14,16 @@ jobs:
       - name: Install Boost
         run: |
           choco install boost-msvc-14.3 -y
+      - name: Debug repository contents
+        run: |
+          Write-Host "Current directory:"
+          Get-Location
+          Write-Host "Contents of current directory:"
+          Get-ChildItem -Force
+          Write-Host "GITHUB_WORKSPACE:"
+          Write-Host $env:GITHUB_WORKSPACE
+          Write-Host "Contents of GITHUB_WORKSPACE:"
+          Get-ChildItem $env:GITHUB_WORKSPACE -Force
       - name: cmake
         run: |
           cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build -DBOOST_ROOT="C:/local/boost_1_87_0" -DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=ON
