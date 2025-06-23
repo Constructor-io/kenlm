@@ -22,6 +22,7 @@ jobs:
             -DBoost_INCLUDE_DIR="C:/local/boost_1_87_0" `
             -DBoost_LIBRARY_DIR="C:/local/boost_1_87_0/lib64-msvc-14.3" `
             -DBoost_USE_STATIC_LIBS=ON `
+            -DBoost_NO_BOOST_CMAKE=ON `
             -DCMAKE_CXX_STANDARD=11 `
             -DCMAKE_CXX_STANDARD_REQUIRED=ON
       - name: Compile
