@@ -47,37 +47,11 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release `
             -DCMAKE_CXX_STANDARD=11 `
             -DCMAKE_CXX_STANDARD_REQUIRED=ON `
-            -DCMAKE_CXX_FLAGS="/W3 /wd4267 /wd4244 /EHsc /bigobj /DWIN32" `
+            -DCMAKE_CXX_FLAGS="/DWIN32" `
             -DCMAKE_VERBOSE_MAKEFILE=ON
       - name: Build with diagnostics
         run: |
-          Write-Host "Starting build..."
-          try {
-            cmake --build build --config Release --parallel 2 --verbose
-          }
-          catch {
-            Write-Host "Build failed with error: $_"
-            Write-Host "Checking for log files..."
-
-            # List all log files
-            Get-ChildItem -Path build -Filter *.log -Recurse | ForEach-Object {
-              Write-Host "`n=== $($_.FullName) ===`n"
-              Get-Content $_.FullName -Tail 50
-            }
-
-            # Check for specific build errors
-            $buildLog = Get-ChildItem -Path build -Filter "*.log" -Recurse | Select-Object -First 1
-            if ($buildLog) {
-              $content = Get-Content $buildLog.FullName
-              if ($content -match "fatal error") {
-                Write-Host "`nFatal errors found:"
-                $content | Select-String "fatal error" | ForEach-Object { Write-Host $_ }
-              }
-            }
-
-            throw
-          }
-
+          cmake --build build --config Release --parallel 2 --verbose
       - name: Test
         working-directory: build
         run: ctest -j2
