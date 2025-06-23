@@ -35,8 +35,7 @@ jobs:
             boost-test:x64-windows `
             boost-interprocess:x64-windows `
             boost-iostreams:x64-windows `
-            boost-ptr-container:x64-windows `
-            unistd:x64-windows-static
+            boost-ptr-container:x64-windows
           echo "VCPKG_ROOT=$PWD" >> $env:GITHUB_ENV
       - name: cmake
         run: |
