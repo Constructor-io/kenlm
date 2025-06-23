@@ -152,6 +152,7 @@ cdef class Model:
 
         :param path: path to an arpa file or a kenlm binary file.
         :param config: configuration options (see lm/config.hh for documentation)
+        :param release_gil: release the GIL while loading the model
         """
         cdef bytes path_bytes = as_str(path)
         cdef char* c_path = path_bytes
