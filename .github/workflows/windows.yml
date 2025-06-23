@@ -16,9 +16,7 @@ jobs:
           choco install boost-msvc-14.3 -y
       - name: cmake
         run: |
-          cmake -E make_directory build
-          cd build
-          cmake -DBOOST_ROOT="C:/local/boost_1_87_0" -DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=ON ..
+          cmake -S . -B build -DBOOST_ROOT="C:/local/boost_1_87_0" -DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=ON
       - name: Compile
         working-directory: build
         run: cmake --build . -j2
