@@ -24,7 +24,7 @@ cdef extern from *:
         }
     }
     """
-    cdef _kenlm.Model* load_virtual_nogil(char* path, _kenlm.Config& config) nogil
+    cdef _kenlm.Model* load_virtual_nogil(const char* path, _kenlm.Config& config) nogil
 
 
 cdef class FullScoreReturn:
