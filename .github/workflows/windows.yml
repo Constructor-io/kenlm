@@ -19,11 +19,7 @@ jobs:
           ./bootstrap-vcpkg.bat
           ./vcpkg integrate install
           ./vcpkg install `
-            boost-program-options:x64-windows-static `
-            boost-system:x64-windows-static `
-            boost-thread:x64-windows-static `
-            boost-test:x64-windows-static `
-            boost-ptr-container:x64-windows-static
+            boost:x64-windows-static
           echo "VCPKG_ROOT=$PWD" >> $env:GITHUB_ENV
       - name: cmake
         run: |
