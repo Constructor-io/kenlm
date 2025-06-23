@@ -34,7 +34,9 @@ jobs:
             boost-thread:x64-windows `
             boost-test:x64-windows `
             boost-interprocess:x64-windows `
-            boost-ptr-container:x64-windows
+            boost-iostreams:x64-windows `
+            boost-ptr-container:x64-windows `
+            unistd:x64-windows-static
           echo "VCPKG_ROOT=$PWD" >> $env:GITHUB_ENV
       - name: cmake
         run: |
@@ -42,10 +44,11 @@ jobs:
             -G "Visual Studio 17 2022" `
             -A x64 `
             -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" `
+            -DVCPKG_TARGET_TRIPLET=x64-windows `
             -DCMAKE_BUILD_TYPE=Release `
             -DCMAKE_CXX_STANDARD=11 `
             -DCMAKE_CXX_STANDARD_REQUIRED=ON `
-            -DCMAKE_CXX_FLAGS="/W3 /wd4267 /wd4244 /EHsc /bigobj" `
+            -DCMAKE_CXX_FLAGS="/W3 /wd4267 /wd4244 /EHsc /bigobj /DWIN32" `
             -DCMAKE_VERBOSE_MAKEFILE=ON
       - name: Build with diagnostics
         run: |
