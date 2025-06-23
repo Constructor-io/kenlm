@@ -8,6 +8,25 @@ cdef bytes as_str(data):
         return data.encode('utf8')
     raise TypeError('Cannot convert %s to string' % type(data))
 
+
+cdef extern from *:
+    """
+    #include "lm/model.hh"
+
+    static lm::base::Model* load_virtual_nogil(const char* path, const lm::ngram::Config& config) noexcept {
+        try {
+            return lm::ngram::LoadVirtual(path, config);
+        } catch (const std::exception& e) {
+            // Could store error message in thread-local storage if needed
+            return nullptr;
+        } catch (...) {
+            return nullptr;
+        }
+    }
+    """
+    cdef _kenlm.Model* load_virtual_nogil(char* path, _kenlm.Config& config) nogil
+
+
 cdef class FullScoreReturn:
     """
     Wrapper around FullScoreReturn.
@@ -127,16 +146,27 @@ cdef class Model:
     cdef public bytes path
     cdef _kenlm.const_Vocabulary* vocab
 
-    def __init__(self, path, Config config = Config()):
+    def __init__(self, path, Config config = Config(), release_gil = False):
         """
         Load the language model.
 
         :param path: path to an arpa file or a kenlm binary file.
         :param config: configuration options (see lm/config.hh for documentation)
         """
+        cdef bytes path_bytes = path.encode('utf-8')
+        cdef char* c_path = path_bytes
+        cdef _kenlm.Model* model
+        cdef _kenlm.Config* c_config = &config._c_config
         self.path = os.path.abspath(as_str(path))
         try:
-            self.model = _kenlm.LoadVirtual(self.path, config._c_config)
+            if release_gil:
+                with nogil:
+                    model = load_virtual_nogil(c_path, c_config[0])
+                if model == NULL:
+                    raise RuntimeError(f"Failed to load model from {path}")
+                self.model = model
+            else:
+                self.model = _kenlm.LoadVirtual(path_bytes, config._c_config)
         except RuntimeError as exception:
             exception_message = str(exception).replace('\n', ' ')
             raise IOError('Cannot read model \'{}\' ({})'.format(path, exception_message))\
