@@ -23,14 +23,44 @@ jobs:
       - name: cmake
         run: |
           cmake -S . -B build `
+            -G "Visual Studio 17 2022" `
+            -A x64 `
             -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake" `
             -DVCPKG_TARGET_TRIPLET=x64-windows-static `
             -DCMAKE_BUILD_TYPE=Release `
             -DCMAKE_CXX_STANDARD=11 `
-            -DCMAKE_CXX_STANDARD_REQUIRED=ON
-      - name: Compile
-        working-directory: build
-        run: cmake --build . -j2
+            -DCMAKE_CXX_STANDARD_REQUIRED=ON `
+            -DCMAKE_CXX_FLAGS="/W3 /wd4267 /wd4244 /EHsc /bigobj" `
+            -DCMAKE_VERBOSE_MAKEFILE=ON
+      - name: Build with diagnostics
+        run: |
+          Write-Host "Starting build..."
+          try {
+            cmake --build build --config Release --parallel 2 --verbose
+          }
+          catch {
+            Write-Host "Build failed with error: $_"
+            Write-Host "Checking for log files..."
+
+            # List all log files
+            Get-ChildItem -Path build -Filter *.log -Recurse | ForEach-Object {
+              Write-Host "`n=== $($_.FullName) ===`n"
+              Get-Content $_.FullName -Tail 50
+            }
+
+            # Check for specific build errors
+            $buildLog = Get-ChildItem -Path build -Filter "*.log" -Recurse | Select-Object -First 1
+            if ($buildLog) {
+              $content = Get-Content $buildLog.FullName
+              if ($content -match "fatal error") {
+                Write-Host "`nFatal errors found:"
+                $content | Select-String "fatal error" | ForEach-Object { Write-Host $_ }
+              }
+            }
+
+            throw
+          }
+
       - name: Test
         working-directory: build
         run: ctest -j2
