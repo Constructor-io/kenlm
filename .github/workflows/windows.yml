@@ -47,7 +47,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release `
             -DCMAKE_CXX_STANDARD=11 `
             -DCMAKE_CXX_STANDARD_REQUIRED=ON `
-            -DCMAKE_CXX_FLAGS="/DWIN32" `
+            -DCMAKE_CXX_FLAGS="/EHsc /DWIN32" `
             -DCMAKE_VERBOSE_MAKEFILE=ON
       - name: Build with diagnostics
         run: |
