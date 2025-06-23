@@ -12,6 +12,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Cache vcpkg
+        uses: actions/cache@v3
+        id: vcpkg-cache
+        with:
+          path: |
+            vcpkg
+            !vcpkg/.git
+            !vcpkg/downloads
+            !vcpkg/buildtrees
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}-v2
       - name: Setup vcpkg
         run: |
           git clone https://github.com/Microsoft/vcpkg.git
