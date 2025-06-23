@@ -11,11 +11,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Install vcpkg
-        uses: microsoft/setup-vcpkg@v1
       - name: Install Boost
         run: |
-          vcpkg install boost-program-options boost-system boost-thread boost-test --triplet x64-windows
+          choco install boost-msvc-14.3 -y
       - name: cmake
         run: |
           cmake -E make_directory build
