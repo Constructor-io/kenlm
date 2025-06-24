@@ -13,6 +13,18 @@ cdef extern from *:
     """
     #include "lm/model.hh"
 
+    /*
+    Non-throwing wrapper for lm::ngram::LoadVirtual to enable nogil execution.
+
+    Cython requires the GIL for exception handling when calling functions that
+    can throw C++ exceptions (to convert them to Python exceptions). Since we
+    need to call LoadVirtual in nogil contexts for performance, this wrapper
+    catches all exceptions and returns nullptr instead of throwing.
+
+    The caller must check for nullptr and handle the error case appropriately,
+    typically by re-acquiring the GIL and throwing a Python exception.
+    */
+
     static lm::base::Model* load_virtual_nogil(const char* path, const lm::ngram::Config& config) noexcept {
         try {
             return lm::ngram::LoadVirtual(path, config);
@@ -167,7 +179,7 @@ cdef class Model:
                     raise RuntimeError(f"Failed to load model from {path}")
                 self.model = model
             else:
-                self.model = _kenlm.LoadVirtual(path_bytes, config._c_config)
+                self.model = _kenlm.LoadVirtual(self.path, config._c_config)
         except RuntimeError as exception:
             exception_message = str(exception).replace('\n', ' ')
             raise IOError('Cannot read model \'{}\' ({})'.format(path, exception_message))\
